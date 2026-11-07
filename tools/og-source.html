@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@600&display=block" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{width:1200px;height:630px;background:#F6F2EA;color:#273B3B;
+       font-family:'Noto Sans TC','PingFang TC',sans-serif;overflow:hidden;position:relative}
+  .pad{position:absolute;inset:0;padding:74px 80px;display:flex;flex-direction:column;justify-content:space-between;width:640px}
+  .eyebrow{font-size:19px;letter-spacing:.28em;color:#7A5C2E}
+  h1{font-family:'Noto Serif TC',serif;font-weight:600;line-height:1.16;letter-spacing:0}
+  h1 em{font-style:normal;display:block;white-space:nowrap}
+  h1 em:first-child{font-size:88px}
+  h1 em:last-child{font-size:63.6px}
+  .sub{font-size:21px;line-height:1.8;color:#586865;margin-top:22px}
+  .foot{display:flex;gap:26px;font-size:17px;letter-spacing:.2em;color:#586865;align-items:center}
+  .foot b{font-family:'Noto Serif TC',serif;font-size:21px;font-weight:600;letter-spacing:.12em;color:#273B3B}
+  svg{position:absolute;right:-86px;top:50%;transform:translateY(-50%)}
+</style></head>
+<body>
+<svg width="620" height="620" viewBox="0 0 1000 1000" id="dial"></svg>
+<div class="pad">
+  <p class="eyebrow">四時有序・東方時間圖譜</p>
+  <h1><em>轉一輪四時，</em><em>讀懂干支與節氣。</em></h1>
+  <div>
+    <p class="sub">十二節切分節月，十二中氣留在月內，<br>月干依年干推算。</p>
+  </div>
+  <p class="foot"><b>立春</b><span>春・寅月</span><span>2026 丙午年度・庚寅月</span></p>
+</div>
+<script>
+const TERMS="立春 雨水 驚蟄 春分 清明 穀雨 立夏 小滿 芒種 夏至 小暑 大暑 立秋 處暑 白露 秋分 寒露 霜降 立冬 小雪 大雪 冬至 小寒 大寒".split(" ");
+const BR="寅 卯 辰 巳 午 未 申 酉 戌 亥 子 丑".split(" ");
+const SE=["#B8CDB7","#E8B6A8","#DCC58E","#B7C9DC"], SN=["春","夏","秋","冬"];
+const P=(r,d)=>{const a=(d-90)*Math.PI/180;return [500+r*Math.cos(a),500+r*Math.sin(a)]};
+const sec=(i,o,s,e)=>{const[ax,ay]=P(o,s),[bx,by]=P(o,e),[cx,cy]=P(i,e),[dx,dy]=P(i,s);
+  return `M${ax} ${ay}A${o} ${o} 0 0 1 ${bx} ${by}L${cx} ${cy}A${i} ${i} 0 0 0 ${dx} ${dy}Z`};
+const ticks=(i,o,n,off,st)=>{let p="";for(let k=0;k<n;k++){const a=off+k*(st||360/n);const[x1,y1]=P(i,a),[x2,y2]=P(o,a);p+=`M${x1} ${y1}L${x2} ${y2}`}return p};
+let s=`<circle cx="500" cy="500" r="486" fill="#F6F2EA" stroke="#273B3B" stroke-opacity=".42" stroke-width="1"/>`;
+SE.forEach((c,i)=>{s+=`<path d="${sec(350,384,i*90,i*90+90)}" fill="${c}" fill-opacity="${i===0?.95:.4}"/>`});
+s+=`<path d="${ticks(350,384,12)}" stroke="#F6F2EA" stroke-width="2.4" fill="none"/>`;
+s+=`<path d="${sec(206,346,0,30)}" fill="#B8CDB7" fill-opacity=".42"/>`;
+s+=`<path d="${ticks(464,474,120)}" stroke="#8B6B39" stroke-opacity=".3" stroke-width=".7" fill="none"/>`;
+s+=`<path d="${ticks(458,478,12,15,30)}" stroke="#586865" stroke-opacity=".38" stroke-width=".9" fill="none"/>`;
+s+=`<path d="${ticks(440,478,12,0,30)}" stroke="#273B3B" stroke-opacity=".5" stroke-width="1.5" fill="none"/>`;
+TERMS.forEach((t,i)=>{const[x,y]=P(410,i*15);const jie=i%2===0;
+  s+=`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-family="Noto Serif TC,serif" font-size="${jie?31:23}" font-weight="${jie?600:500}" fill="${i===0?'#7A5C2E':(jie?'#273B3B':'#586865')}">${t}</text>`});
+SN.forEach((n,i)=>{const[x,y]=P(367,i*90+45);
+  s+=`<circle cx="${x}" cy="${y}" r="20" fill="#F6F2EA"/><circle cx="${x}" cy="${y}" r="20" fill="none" stroke="#8B6B39" stroke-opacity=".45" stroke-width=".9"/><text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-family="Noto Serif TC,serif" font-size="22" font-weight="600" fill="#273B3B" fill-opacity=".72">${n}</text>`});
+s+=`<circle cx="500" cy="500" r="206" fill="none" stroke="#273B3B" stroke-opacity=".24"/>`;
+BR.forEach((b,i)=>{const[x,y]=P(278,i*30+15);
+  s+=`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-family="Noto Serif TC,serif" font-size="44" font-weight="600" fill="#273B3B" fill-opacity="${i===0?1:.82}">${b}</text>`});
+s+=`<circle cx="500" cy="500" r="206" fill="#F6F2EA" fill-opacity=".92"/>`;
+s+=`<text x="500" y="470" text-anchor="middle" font-family="Noto Serif TC,serif" font-size="86" font-weight="600" letter-spacing="6" fill="#273B3B">立春</text>`;
+s+=`<line x1="438" x2="562" y1="506" y2="506" stroke="#273B3B" stroke-opacity=".24"/>`;
+s+=`<text x="500" y="542" text-anchor="middle" font-family="Noto Sans TC,sans-serif" font-size="27" letter-spacing="4" fill="#586865">春・寅月</text>`;
+s+=`<line x1="500" y1="308" x2="500" y2="8" stroke="#8B6B39" stroke-width="1.7"/>`;
+s+=`<path d="M500 0.5L507.5 8L500 15.5L492.5 8Z" fill="#8B6B39"/><circle cx="500" cy="500" r="7" fill="#F6F2EA" stroke="#8B6B39" stroke-width="1.4"/>`;
+document.getElementById('dial').innerHTML=s;
+</script>
+</body></html>

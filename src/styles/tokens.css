@@ -1,0 +1,71 @@
+/* 四時有序 — 設計 token
+   色值經過對比實測：正文 ≥ 4.5:1，大字與功能性圖形 ≥ 3:1。
+   淺色礦物色只用於面積與環帶，文字一律使用深色版本。 */
+
+:root {
+  /* 紙與墨 */
+  --paper:        #F6F2EA;
+  --paper-sunk:   #EFEADE;
+  --paper-deep:   #E7E0D1;
+  --ink:          #273B3B;  /* 對 paper 10.7:1 */
+  --ink-muted:    #586865;  /* 對 paper 5.3:1 */
+  --ink-faint:    #8A9794;  /* 僅用於線條與裝飾，不用於正文 */
+
+  --brass:        #8B6B39;  /* 刻線與圖形，對 paper 4.4:1 */
+  --brass-ink:    #7A5C2E;  /* 文字用，對 paper 5.5:1 */
+  --brass-soft:   rgba(139, 107, 57, 0.42);
+  --seal:         #9E3B2E;  /* 朱印。全站唯一的紅，只用在標誌與收尾 */
+
+  --rule:         rgba(39, 59, 59, 0.14);
+  --rule-mid:     rgba(39, 59, 59, 0.24);
+  --rule-strong:  rgba(39, 59, 59, 0.42);
+
+  /* 四季：淺色為環帶與底色，-ink 為同色系文字 */
+  --spring:       #B8CDB7;
+  --summer:       #E8B6A8;
+  --autumn:       #DCC58E;
+  --winter:       #B7C9DC;
+  --spring-ink:   #41634B;  /* 6.0:1 */
+  --summer-ink:   #9E5B49;  /* 4.6:1 */
+  --autumn-ink:   #7E6020;  /* 4.9:1 */
+  --winter-ink:   #4D6A86;  /* 5.0:1 */
+  --lilac:        #C9BBD8;
+
+  /* 目前季節。由 JS 在 <body> 上切換 data-season，驅動以下三個變數 */
+  --season:       var(--spring);
+  --season-ink:   var(--spring-ink);
+  --season-wash:  rgba(184, 205, 183, 0.34);
+
+  /* 字體 */
+  --serif: 'Noto Serif TC', 'Songti TC', 'Source Han Serif TC', 'PingFang TC', serif;
+  --sans:  'Noto Sans TC', 'PingFang TC', 'Heiti TC', 'Microsoft JhengHei', sans-serif;
+
+  /* 字級：以 1.333 為級距，依視窗寬度收放 */
+  --t-display: clamp(1.7rem, 1.1rem + 2.1vw, 2.75rem);
+  --t-h2:      clamp(1.45rem, 2.2vw, 2.05rem);
+  --t-h3:      clamp(1.25rem, 1.7vw, 1.6rem);
+  --t-lead:    clamp(1.05rem, 1.3vw, 1.22rem);
+  --t-body:    clamp(1rem, 1.05vw, 1.0625rem);
+  --t-small:   0.875rem;
+  --t-micro:   0.75rem;
+
+  /* 間距 */
+  --gap-section: clamp(4rem, 9vw, 11rem);
+  --gap-block:   clamp(1.75rem, 3.2vw, 3rem);
+  --pad-x:       clamp(1.25rem, 4.2vw, 4.5rem);
+  --measure:     1360px;
+  --text-measure: 31em;
+
+  /* 動態 */
+  --ease-dial:  cubic-bezier(0.22, 0.61, 0.26, 1);
+  --ease-soft:  cubic-bezier(0.22, 0.8, 0.3, 1);
+  --dur-reveal: 900ms;
+  --dur-tap:    150ms;
+  --dur-term:   420ms;
+  --dur-season: 640ms;
+}
+
+body[data-season='spring'] { --season: var(--spring); --season-ink: var(--spring-ink); --season-wash: rgba(184, 205, 183, 0.34); }
+body[data-season='summer'] { --season: var(--summer); --season-ink: var(--summer-ink); --season-wash: rgba(232, 182, 168, 0.32); }
+body[data-season='autumn'] { --season: var(--autumn); --season-ink: var(--autumn-ink); --season-wash: rgba(220, 197, 142, 0.32); }
+body[data-season='winter'] { --season: var(--winter); --season-ink: var(--winter-ink); --season-wash: rgba(183, 201, 220, 0.34); }
