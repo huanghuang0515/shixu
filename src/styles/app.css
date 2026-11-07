@@ -39,7 +39,7 @@
   letter-spacing: 0.16em;
   text-decoration: none;
 }
-.nav__mark span { font-family: var(--sans); font-size: 0.66rem; letter-spacing: 0.3em; color: var(--ink-muted); }
+.nav__mark span { font-family: var(--sans); font-size: 0.72rem; letter-spacing: 0.26em; color: var(--ink-muted); }
 .nav__links { display: flex; gap: clamp(0.35rem, 1.6vw, 1.6rem); }
 .nav__link {
   display: block;
@@ -291,7 +291,7 @@
   letter-spacing: 0.12em;
   color: var(--ink);
 }
-.hero__status-sep { color: var(--brass-soft); }
+.hero__status-sep { color: var(--brass-ink); opacity: 0.55; }
 
 .hero__guide {
   display: grid;
