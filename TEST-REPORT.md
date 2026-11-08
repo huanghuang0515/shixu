@@ -120,7 +120,24 @@
 > 另外，桌面瀏覽器窗格模擬不了小於約 **666px** 的視窗寬度（會夾在 666），
 > 所有手機尺寸的量測一律走 iframe。
 
-## 7. 性能（實驗室數據，非真實使用者）
+## 7. 部署
+
+`.github/workflows/deploy.yml` 已在 GitHub 上實際執行並成功：
+
+| 項目 | 結果 |
+|---|---|
+| Actions 工作流程 | `建置並部署到 GitHub Pages` — completed / success |
+| 線上網址 | https://huanghuang0515.github.io/shixu/ — HTTP 200 |
+| 頁面標題 | `四時有序 SHI XU｜轉一輪四時，讀懂干支與節氣` |
+| 資源路徑 | `assets/index-*.js`、`assets/index-*.css`、`favicon.svg` 皆回 200 |
+| 線上實測（真實 Chrome） | React 掛載成功、載入頁正常結束、兩座羅盤與紋樣齊全、季節篩選存在、首屏指標巡行中 |
+
+`base: './'` 在 GitHub Pages 的子路徑（`/shixu/`）下運作正常，資源沒有 404。
+
+> `og:image` 目前是相對路徑 `./og.png`。部分社群平台的抓取器對相對路徑支援不一，
+> 若要確保分享預覽正確，建議改成完整網址。此項未實際以抓取器驗證。
+
+## 8. 性能（實驗室數據，非真實使用者）
 
 正式版（`vite preview`）、1440×900、本機 localhost、**未套用網路或 CPU 節流**：
 
@@ -228,7 +245,5 @@
    `display=swap` 與完整 fallback。
 7. **沒有自動化的無障礙掃描工具（axe、Lighthouse a11y）。**
    上述結果來自手動鍵盤操作與以程式量測 DOM、對比與觸控目標尺寸。
-8. **GitHub Pages 部署未實際跑過。** 工作流程檔已寫好，但推送尚未完成，
-   Actions 從未執行，線上網址也尚未產生。
-9. **獎項品質是創作目標，不是結論。** Awwwards、Webby、FWA 的結果由外部獨立評審決定，
+8. **獎項品質是創作目標，不是結論。** Awwwards、Webby、FWA 的結果由外部獨立評審決定，
    本報告只記錄內部檢查。

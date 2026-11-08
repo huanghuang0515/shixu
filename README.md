@@ -54,12 +54,9 @@ npm run preview
 `.github/workflows/deploy.yml` 會在推送到 `main` 時自動型別檢查、跑測試、建置，
 並發布到 GitHub Pages。
 
-第一次使用前，要到 repo 的 **Settings → Pages → Build and deployment**，
-把 **Source** 設為 **GitHub Actions**。設定完成後，網址會是：
+已部署並確認可存取：
 
-```
-https://huanghuang0515.github.io/shixu/
-```
+**https://huanghuang0515.github.io/shixu/**
 
 `vite.config.ts` 設定 `base: './'`，所以資源路徑是相對的，
 放在子路徑（如 `/shixu/`）或網域根目錄都能運作，也可以直接改放到任何靜態主機。
