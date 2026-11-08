@@ -3,13 +3,13 @@
 一座可轉動、可閱讀的東方時間羅盤。訪客選一個節氣，就能看見它歸在哪個地支月，
 以及該年度這個月的月干支是什麼。
 
-一頁式網站，五個章節：識四時 → 轉羅盤 → 讀干支 → 看對照 → 誌餘。
+一頁式網站，四個章節加一段收尾：識四時 → 轉羅盤 → 讀干支 → 看對照 → 誌餘。
 
 ---
 
 ## 啟動方法
 
-需要 Node.js 20 以上（開發機實測 v22.23.3、npm 10.9.9）。
+需要 Node.js 22 以上（開發機實測 v22.23.3、npm 10.9.9）。
 
 安裝相依套件：
 
@@ -23,7 +23,7 @@ npm install
 npm run dev
 ```
 
-執行邏輯測試（24 項）：
+執行干支邏輯測試（24 項）：
 
 ```bash
 npm run test
@@ -47,7 +47,22 @@ npm run build
 npm run preview
 ```
 
-`vite.config.ts` 設定 `base: './'`，`dist/` 可直接放到任何靜態主機或以 `file://` 開啟子資源，
+---
+
+## 部署
+
+`.github/workflows/deploy.yml` 會在推送到 `main` 時自動型別檢查、跑測試、建置，
+並發布到 GitHub Pages。
+
+第一次使用前，要到 repo 的 **Settings → Pages → Build and deployment**，
+把 **Source** 設為 **GitHub Actions**。設定完成後，網址會是：
+
+```
+https://huanghuang0515.github.io/shixu/
+```
+
+`vite.config.ts` 設定 `base: './'`，所以資源路徑是相對的，
+放在子路徑（如 `/shixu/`）或網域根目錄都能運作，也可以直接改放到任何靜態主機。
 不需要後端或資料庫。
 
 ---
@@ -61,8 +76,8 @@ npm run preview
 | Vite | 8.3.6 | 開發與建置 |
 | Vitest | 5.1.0 | 純函式測試 |
 
-沒有安裝任何動畫套件。所有動態都用 CSS transition 與一組 keyframes 完成，
-避免重複引入多套動畫工具。羅盤是手寫的 SVG，文字全部是真實的 `<text>` 與 HTML，
+**沒有安裝任何動畫套件。** 所有動態都用 CSS transition、一組 keyframes 與
+單一 requestAnimationFrame 完成。羅盤是手寫的 SVG，文字全部是真實的 `<text>` 與 HTML，
 沒有把中文烘焙進圖片。
 
 ### 專案結構
@@ -77,21 +92,26 @@ src/
   lib/
     ganzhi.ts         干支推算純函式（正模、年干支、五虎遁、月干支、輸入驗證）
     ganzhi.test.ts    24 項邏輯測試
-    geometry.ts       羅盤幾何（極座標、環形扇區、刻線合併路徑）
+    geometry.ts       羅盤幾何與紋樣（極座標、環形扇區、滾花、連珠、雲頭、日芒、四季牌）
     useAlmanac.ts     狀態、URL 同步、上一頁還原、媒體查詢
+    useReveal.ts      捲動進場
   components/
-    Compass.tsx       羅盤 SVG（桌面與手機兩組半徑配置）
+    Compass.tsx       羅盤 SVG（桌面與手機兩組半徑配置、首屏指標巡行）
+    Loader.tsx        開場載入頁
     Controls.tsx      年度選單、前後切換、節氣選單、手機節月籌碼
     InfoPanel.tsx     資訊面板
-    YearTable.tsx     全年對照表（桌面表格／手機清單）
-    SiteNav.tsx       導覽與目前區段提示
-    ChapterMark.tsx   卷號標記
+    YearTable.tsx     全年對照表（桌面表格／手機清單，含季節篩選）
+    SiteNav.tsx       導覽、目前區段提示、年度牌
+    Medal.tsx         章節徽記
+    Anno.tsx          羅盤四周的引線註記
+    Seal.tsx          朱印
   styles/
     tokens.css        色彩、字體、字級、間距、動態曲線
     base.css          重置、紙紋、焦點樣式、reduced-motion
-    app.css           版面與元件
+    app.css           版面、紋樣、載入頁、進場
 tools/
-  og-source.html      產生 public/og.png 的來源頁（見下）
+  og-source.html      產生 public/og.png 的來源頁
+screenshots/          五種指定尺寸的首屏，取自正式建置版本
 ```
 
 ### 單一資料源
@@ -102,11 +122,14 @@ tools/
 
 `computeMonthGanzhi(year, monthIndex)` 是純函式，不依賴畫面狀態，可獨立測試。
 
+首屏指標巡行時顯示的節氣是**預覽**，只存在於該元件內部，不會改動全站狀態；
+點一下才真正選定。
+
 ### URL 狀態
 
 `?year=2026&term=lichun`。年份限制在 2024–2033，節氣代號比對白名單，
 任何無效值都回到預設（2026 丙午年度、立春）並改寫網址。
-上一頁／下一頁可還原選取；連續按前後切換時會合併歷史紀錄，不會一步塞一筆。
+上一頁／下一頁可還原選取；連續按前後切換時會合併歷史紀錄。
 
 ### 重新產生 OG 圖片
 
@@ -157,13 +180,6 @@ tools/
   https://www.hko.gov.hk/tc/education/astronomy-and-time/time-service/00506-what-year-is-it-today.html
 
 站內未加入來源未支持的民俗延伸，也沒有藏干、納音、神煞或八卦方位。
-
----
-
-## 截圖
-
-`screenshots/` 內是五種指定尺寸的首屏，以及 1440 寬、選取大暑時的狀態，
-取自正式建置版本。取得方式與注意事項見測試報告第 6 節。
 
 ---
 
